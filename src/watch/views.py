@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.conf import settings
 import os
 import json
+import csv
+
 # Create your views here.
 
 def watch(request):
@@ -21,7 +23,19 @@ def watch(request):
         
         fl=request.GET.get('fl',None)
         if fl:
-            pass
+            file_path=os.path.join(node_path,fl)
+            ctx['data']=json.dumps(parse_csv(file_path))
         
     return render(request,'watch/index.html',context=ctx)
     
+
+def parse_csv(path):
+    with open(path,'rb') as f:
+        reader = csv.DictReader(f)
+        dc={}
+        for key in reader.fieldnames:
+            dc[key]=[]
+        for row in reader:
+            for key in reader.fieldnames:
+                dc[key].append(row[key])
+    return dc

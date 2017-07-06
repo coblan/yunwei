@@ -19,7 +19,9 @@
 
     <script>
         nodes={{ nodes | safe }}
-        files={{ files | safe }}
+        files={{ files | safe |default:'[]'}}
+        data={{ data | safe | default:'{}' }}
+
         $(function(){
             new  Vue({
                 el:'#node-menu',
