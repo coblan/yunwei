@@ -101,6 +101,11 @@ def merge_all(src,dst):
     for root, dirs, files in os.walk(src):
         rel_root=os.path.relpath(src,root)
         dst_root=os.path.join(dst,rel_root)
+        try:
+            os.makedirs(dst_root)
+        except os.error:
+            pass
+        
         for fl in files:
             merge_file(os.path.join(root,fl),os.path.join(dst_root,fl))
  
@@ -115,3 +120,5 @@ def merg_csv(src,dst):
         with open(src,'rb') as f:
             with open(dst,'a+b') as dst_file:
                 dst_file.writelines(f.readlines()[1:])
+    else:
+        shutil.copy(src,dst)

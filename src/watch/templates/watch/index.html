@@ -17,7 +17,8 @@
     <script src='{% static "js/uis.pack.js" %}'></script>
     <script src='{% static "js/fields.pack.js?t=20170611" %}'></script>
 
-    <script src="https://cdn.bootcss.com/echarts/3.6.2/echarts.min.js"></script>
+    <script src='{% static "lib/echarts.common.min.js" %}'></script>
+
 
     <script>
         nodes={{ nodes | safe }}
@@ -74,6 +75,11 @@
                                    }
                                }
                            ],
+                           grid: { // 控制图的大小，调整下面这些值就可以，
+                               x: 140,
+//                               x2: 100,
+//                               y2: 150,// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                           },
                            xAxis: {
                                type: 'category',
                                data: data.datetime,
@@ -96,6 +102,11 @@
             })
         })
     </script>
+    <style>
+        body{
+            margin: 0 5em;
+        }
+    </style>
 </head>
 <body >
 <div id="node-menu">
