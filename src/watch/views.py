@@ -85,8 +85,9 @@ def upload(request):
     return HttpResponse(json.dumps(dc),content_type="application/json")
 
 def un_tgz_all(path):
+    old_cwd=os.getcwd()
+    
     os.chdir(path)
-
     for item in os.listdir(path):
         if item.endswith('.tar.gz'):
             fl_tar.un_tgz(item)
@@ -96,6 +97,8 @@ def un_tgz_all(path):
         shutil.move(item,'../'+item)
     os.chdir('..')
     shutil.rmtree('data')
+    
+    os.chdir(old_cwd)
 
 def merge_all(src,dst):
     for root, dirs, files in os.walk(src):
