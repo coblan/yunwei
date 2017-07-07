@@ -17,10 +17,19 @@
     <script src='{% static "js/uis.pack.js" %}'></script>
     <script src='{% static "js/fields.pack.js?t=20170611" %}'></script>
 
+    <script src="https://cdn.bootcss.com/echarts/3.6.2/echarts.min.js"></script>
+
     <script>
         nodes={{ nodes | safe }}
         files={{ files | safe |default:'[]'}}
         data={{ data | safe | default:'{}' }}
+
+        norm_data={}
+
+        for(var key in data){
+            if(key=='datetime'){continue}
+            norm_data[key]=data[key]
+        }
 
         $(function(){
             new  Vue({
@@ -28,11 +37,61 @@
                 data:{
                     nodes:nodes,
                     files:files,
+                    norm_data:norm_data,
                 },
                 methods:{
                     get_file_link:function(fl){
                         return ex.appendSearch({fl:fl})
                     }
+                },
+                mounted:function(){
+                   for(var key in norm_data){
+
+                       var myChart = echarts.init(document.getElementById('main-'+key));
+
+                       var option = {
+                           title: {
+                               text: key
+                           },
+                           tooltip: {},
+                           legend: {
+                               data:['销量']
+                           },
+                           dataZoom: [
+                               {
+                                   show: true,
+                                   realtime: true,
+                                   start: 30,
+                                   end: 100,
+                                   handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                                   handleSize: '80%',
+                                   handleStyle: {
+                                       color: '#fff',
+                                       shadowBlur: 3,
+                                       shadowColor: 'rgba(0, 0, 0, 0.6)',
+                                       shadowOffsetX: 2,
+                                       shadowOffsetY: 2
+                                   }
+                               }
+                           ],
+                           xAxis: {
+                               type: 'category',
+                               data: data.datetime,
+                           },
+                           yAxis: {
+                               type: 'value',
+                               boundaryGap: [0, '100%']
+                           },
+                           series: [{
+                               name: key,
+                               type:'line',
+                               data: norm_data[key]
+                           }]
+                       };
+
+                       myChart.setOption(option);
+                   }
+
                 }
             })
         })
@@ -51,6 +110,10 @@
             <a :href="get_file_link(fl)" v-text="fl"></a>
         </li>
     </ul>
+
+    <div v-for="(value,key) in norm_data" :id="'main-'+key" style="width: 600px;height:400px;">
+
+    </div>
 </div>
 </body>
 </html>

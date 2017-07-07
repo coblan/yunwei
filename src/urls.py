@@ -19,7 +19,8 @@ from watch import views as watch_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^watch/?$',watch_views.watch)
+    url(r'^watch/?$',watch_views.watch),
+    url(r'^upload/?$',watch_views.upload),
 ]
 
 
