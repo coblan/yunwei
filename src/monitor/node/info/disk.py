@@ -7,7 +7,7 @@ import re
 def record(path):
     disk_part_list = psutil.disk_partitions()
     for part in disk_part_list:
-        usag=psutil.disk_usage(part.device)
+        usag=psutil.disk_usage(part.mountpoint)
         name = re.sub('\W','_',part.device)
         fl_name =os.path.join(path,'disk_usage_%s.csv'%name)
         append(usag.__dict__,fl_name)
